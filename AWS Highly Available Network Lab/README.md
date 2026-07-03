@@ -1,6 +1,6 @@
 # AWS SAA Network Lab Design
 
-![network lab design](design.png)
+![network lab design](./design.png)
 
 ## About
 
