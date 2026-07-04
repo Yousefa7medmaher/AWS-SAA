@@ -1,10 +1,7 @@
 # AWS SAA Network Lab Design
 
-<<<<<<< HEAD
-![network lab design](./design.png)
-=======
+
 ![network lab design](./deisgn.png)
->>>>>>> 90312b3 (feat: implement VPC endpoints architecture with private EC2 using Terraform)
 
 ## About
 
