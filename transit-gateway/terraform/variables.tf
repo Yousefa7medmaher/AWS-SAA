@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "name_prefix" {
   description = "Prefix used for all created resources"
   type        = string
-  default     = "vpc-peering-lab"
+  default     = "vpc-tranist-lab"
 }
 
 variable "vpc_cidr_1" {
@@ -21,6 +21,13 @@ variable "vpc_cidr_2" {
   type        = string
   default     = "12.0.0.0/16"
 }
+variable "vpc_cidr_3" {
+  description = "CIDR block for the third VPC"
+  type        = string
+  default     = "14.0.0.0/16"
+}
+
+
 
 variable "vpc_1_subnet_1" {
   description = "CIDR block for the subnet in VPC 1"
@@ -34,6 +41,15 @@ variable "vpc_2_subnet_1" {
   default     = "12.0.50.0/24"
 }
 
+
+
+variable "vpc_3_subnet_1" {
+  description = "CIDR block for the subnet in VPC 3"
+  type        = string
+  default     = "14.0.50.0/24"
+}
+
+
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
@@ -45,3 +61,4 @@ variable "allowed_ssh_cidr" {
   type        = string
   default     = "0.0.0.0/0"
 }
+
