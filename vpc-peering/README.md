@@ -1,4 +1,5 @@
 # VPC Peering Lab
+![Design](design.png)
 
 This lab provisions a simple AWS networking environment with two VPCs, two public subnets, two EC2 instances, internet gateways, and a VPC peering connection.
 
