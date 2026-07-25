@@ -1,77 +1,150 @@
-# AWS SAA Practice Repo
+# AWS Solutions Architect Associate (SAA) – Hands-on Projects
 
-## Purpose of this repository
-This repository is designed for hands-on practice with the AWS Certified Solutions Architect Associate exam. It helps build strong skills in:
+This repository contains my hands-on AWS projects built while preparing for the **AWS Certified Solutions Architect – Associate (SAA-C03)** certification.
 
-- Thinking like a Solution Architect
-- Choosing the right AWS services for a given problem
-- Designing secure, scalable, and reliable AWS solutions
-- Writing Infrastructure as Code with Terraform
-- Understanding architecture, security, and resilience best practices
+Rather than focusing only on theory, every topic is implemented through practical labs using **Terraform** and AWS best practices to simulate real-world cloud architectures.
 
-## What will be done here?
-This repo is intended to be a practical training space for small but meaningful AWS projects, so I can apply SAA concepts in real-world scenarios.
+The goal is to strengthen both my AWS knowledge and my infrastructure automation skills.
 
-## What this journey will cover
-### 1. AWS Services Practice
-I will practice core services that are important for the exam, such as:
-- Amazon S3
-- Amazon CloudFront
-- IAM
-- EC2
-- VPC
-- Route 53
-- RDS
-- Lambda
-- API Gateway
-- ECS / EKS
-- CloudWatch
+---
+
+# Objectives
+
+- Build real AWS architectures from scratch
+- Practice Infrastructure as Code (Terraform)
+- Understand AWS architecture design patterns
+- Learn how AWS services integrate together
+- Improve Solution Architecture decision-making
+- Prepare for the AWS SAA certification with practical experience
+
+---
+
+# Technologies
+
+- AWS
 - Terraform
+- Docker
+- Linux
+- NGINX
+- Python
+- Git & GitHub
+- CloudWatch
+- IAM
+- VPC Networking
 
-### 2. Architectural Thinking
-Here I will focus on:
-- Choosing the most suitable service for the problem
-- Understanding trade-offs between solutions
-- Thinking about scalability, reliability, security, and cost
-- Writing practical and convincing solutions as a Solution Architect
+---
 
-### 3. Infrastructure as Code
-I will use Terraform to build infrastructure in a repeatable and professional way, with focus on:
-- Variables
+# Repository Structure
+
+| Project | Description |
+|----------|-------------|
+| AWS Highly Available Network Lab | Highly available VPC networking architecture |
+| s3-cloudFront | Secure static website hosting using Amazon S3 and CloudFront |
+| lambda-project | Serverless image thumbnail generator using AWS Lambda, S3, and Lambda Layers |
+| CloudWatch | Monitoring, metrics, dashboards, and alarms |
+| EC2-Autoscaling | Highly available EC2 Auto Scaling architecture |
+| AWS_ECS_Fargate | Deploy containerized applications on ECS Fargate with ALB and CloudWatch Logs |
+| VPC-Endpoints | Private connectivity using Interface and Gateway Endpoints |
+| VPC-FlowLog | Network traffic monitoring with VPC Flow Logs |
+| transit-gateway | Multi-VPC connectivity using AWS Transit Gateway |
+| vpc-peering | Private communication between VPCs using VPC Peering |
+
+---
+
+# What You'll Find
+
+Each project includes:
+
+- Architecture diagram
+- Terraform infrastructure
+- AWS resource deployment
+- Screenshots
+- Documentation
+- Design decisions
 - Outputs
-- Modules
-- Tagging
-- Security best practices
-- Reusable infrastructure
+- Cleanup instructions (when applicable)
 
-## How I will use this repo daily
-1. Open a new AWS concept or project.
-2. Build a practical solution using Terraform.
-3. Explain why this design was chosen.
-4. Review mistakes and improve the solution.
-5. Repeat the same idea across multiple scenarios until it becomes second nature.
+---
 
-## Why this is useful for the AWS SAA exam
-Because the exam is not only about memorizing services; it is about:
-- Understanding the problem
-- Choosing the best solution
-- Thinking architecturally
-- Knowing best practices
-- Explaining technical decisions clearly
+# Skills Practiced
 
-## Current content in the repo
-The current folder is:
-- s3-cloudFront
+- Infrastructure as Code (Terraform)
+- High Availability
+- Scalability
+- Networking
+- Serverless Architecture
+- Container Orchestration
+- Monitoring & Logging
+- Security Best Practices
+- Load Balancing
+- IAM
+- Cloud Architecture Design
 
-This is a practical example of:
-- Storing data in S3
-- Delivering content through CloudFront
-- Securing access properly
-- Using Terraform to build the infrastructure
+---
 
-## Final goal
-I want to become:
-- Stronger in architectural thinking
-- More confident as an AWS Solutions Architect
-- Better at Terraform
-- Able to build practical and professional solutions
+# Current Progress
+
+This repository is continuously updated as I progress through the AWS SAA learning path.
+
+Completed topics include:
+
+- VPC
+- EC2
+- Auto Scaling
+- Application Load Balancer
+- CloudFront
+- S3
+- Lambda
+- Lambda Layers
+- ECS Fargate
+- CloudWatch
+- Transit Gateway
+- VPC Peering
+- VPC Endpoints
+- VPC Flow Logs
+
+Upcoming projects include:
+
+- API Gateway
+- EKS
+- RDS
+- Aurora
+- DynamoDB
+- Step Functions
+- EventBridge
+- SNS
+- SQS
+- Route 53
+- ElastiCache
+- Storage Services
+- Security Services
+- Disaster Recovery Architectures
+
+---
+
+# Why This Repository?
+
+Many AWS repositories demonstrate only isolated examples.
+
+This repository focuses on building **production-inspired architectures** while applying AWS best practices and infrastructure automation using Terraform.
+
+Each project is designed as a practical learning exercise that reflects real cloud engineering scenarios.
+
+---
+
+# Disclaimer
+
+These projects are built for educational purposes while preparing for the AWS Certified Solutions Architect – Associate certification.
+
+They are intended to demonstrate AWS concepts, Terraform usage, and cloud architecture patterns.
+
+---
+
+# Author
+
+**Yousef Ahmed Maher**
+
+Cloud & DevOps Engineer
+
+GitHub:
+https://github.com/Yousefa7medmaher
