@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>AWS ECS | elastic container symphony</title>
+  <!-- Font Awesome 6 for AWS icons & more -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle at 20% 20%, #0a0f1e, #03050a);
+      font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* animated grid & electricity background */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* electricity spark overlay */
+    .electric-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 30%, rgba(0, 180, 255, 0.08) 0%, transparent 60%),
+                  radial-gradient(circle at 80% 70%, rgba(138, 43, 226, 0.1) 0%, transparent 55%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .spark-line {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><path d="M100 200 L150 180 L130 250 L200 210 L180 300 L260 250 L230 350 L310 280 L280 400 L360 320 L330 430 L420 340 L380 480 L480 380 L450 530 L550 430 L510 560 L610 460 L570 600 L650 490 L620 630 L700 520 L670 660 L750 540 L720 680 L800 560 L770 700 L830 580 L800 720 L860 600 L830 740 L890 620 L860 760 L920 640 L890 780 L950 660 L920 800" stroke="%2300ffff" stroke-width="1.8" fill="none" opacity="0.25" stroke-dasharray="4 12" filter="url(%23glow)"/></svg>') repeat-y;
+      background-size: cover;
+      animation: electricShift 8s infinite alternate ease-in-out;
+    }
+
+    @keyframes electricShift {
+      0% { opacity: 0.3; transform: scaleX(1) translateY(0); }
+      100% { opacity: 0.7; transform: scaleX(1.02) translateY(-10px); }
+    }
+
+    /* main card - glass container */
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 1300px;
+      width: 100%;
+      background: rgba(8, 15, 28, 0.7);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(0, 255, 255, 0.25);
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), 0 0 80px rgba(0, 180, 255, 0.3);
+      border-radius: 3.5rem;
+      padding: 2.5rem 2.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .container:hover {
+      box-shadow: 0 40px 70px rgba(0, 0, 0, 0.8), 0 0 110px rgba(0, 212, 255, 0.5);
+      border-color: rgba(0, 255, 200, 0.5);
+    }
+
+    /* header with aws logo style */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .title-section {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .aws-badge {
+      background: #FF9900;
+      color: #000;
+      font-weight: 800;
+      font-size: 2.2rem;
+      padding: 0.4rem 1.4rem;
+      border-radius: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 0 30px #FF9900aa;
+      letter-spacing: -0.5px;
+    }
+
+    .aws-badge i {
+      font-size: 2.5rem;
+      color: #000;
+    }
+
+    .service-title h1 {
+      font-size: 3.2rem;
+      font-weight: 700;
+      background: linear-gradient(to right, #ffffff, #a0e9ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+      text-shadow: 0 0 20px #00a6ff;
+    }
+
+    .sub {
+      color: #b0e0ff;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+
+    .electric-icon {
+      font-size: 2.2rem;
+      color: #0ff;
+      filter: drop-shadow(0 0 12px cyan);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 25px #0ff); }
+      100% { opacity: 0.7; transform: scale(1); }
+    }
+
+    /* aws icons row */
+    .aws-services-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      background: rgba(0, 20, 40, 0.5);
+      border-radius: 3rem;
+      padding: 1.2rem 2rem;
+      border: 1px solid rgba(0, 255, 255, 0.35);
+      backdrop-filter: blur(8px);
+    }
+
+    .aws-icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: 0.2s;
+    }
+
+    .aws-icon-item i {
+      font-size: 2.8rem;
+      filter: drop-shadow(0 0 12px currentColor);
+      transition: 0.2s;
+    }
+
+    .aws-icon-item:hover i {
+      transform: translateY(-5px);
+      filter: drop-shadow(0 0 25px cyan);
+    }
+
+    /* main visual: ECS architecture pipeline */
+    .pipeline-grid {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      margin: 0.8rem 0 1.2rem;
+    }
+
+    .node {
+      background: rgba(10, 25, 45, 0.8);
+      backdrop-filter: blur(14px);
+      border: 1.5px solid #00e0ff;
+      border-radius: 2.2rem;
+      padding: 1.3rem 1.8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 0 30px rgba(0, 180, 255, 0.4);
+      min-width: 110px;
+      transition: 0.25s;
+      position: relative;
+    }
+
+    .node:hover {
+      transform: translateY(-6px);
+      border-color: #ffbb00;
+      box-shadow: 0 0 55px #ffaa00aa;
+    }
+
+    .node i {
+      font-size: 2.7rem;
+      color: #0cf;
+    }
+
+    .node span {
+      font-weight: 600;
+      color: #e0f0ff;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .connector {
+      display: flex;
+      align-items: center;
+      position: relative;
+      font-size: 1.8rem;
+      color: #0ff;
+      filter: drop-shadow(0 0 15px cyan);
+      animation: flowElectricity 1.2s infinite alternate;
+    }
+
+    @keyframes flowElectricity {
+      0% { color: #0ff; filter: drop-shadow(0 0 8px cyan); }
+      100% { color: #ffd966; filter: drop-shadow(0 0 22px #ffaa00); }
+    }
+
+    .lightning-bolt {
+      font-size: 2rem;
+      margin: 0 0.2rem;
+      color: #ffe484;
+      animation: strike 0.9s infinite;
+    }
+
+    @keyframes strike {
+      0% { opacity: 0.5; text-shadow: 0 0 5px yellow; }
+      50% { opacity: 1; text-shadow: 0 0 35px orange, 0 0 15px red; }
+      100% { opacity: 0.5; text-shadow: 0 0 5px yellow; }
+    }
+
+    /* detail cards */
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.8rem;
+      margin-top: 1rem;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      border-radius: 2rem;
+      padding: 1.5rem 1.3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      transition: 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0,255,255,0.15) 0%, transparent 70%);
+      opacity: 0;
+      transition: 0.4s;
+    }
+
+    .card:hover::after {
+      opacity: 1;
+    }
+
+    .card i {
+      font-size: 2.3rem;
+      color: #ff9900;
+      filter: drop-shadow(0 0 10px #ff9900);
+    }
+
+    .card h3 {
+      color: white;
+      font-weight: 600;
+      font-size: 1.4rem;
+    }
+
+    .card p {
+      color: #cbd5e6;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .footer-note {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #8ab3ff;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      border-top: 1px dashed #2f4f7c;
+      padding-top: 1.2rem;
+    }
+
+    .electric-pulse {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .circle-pulse {
+      width: 10px;
+      height: 10px;
+      background: #0ff;
+      border-radius: 50%;
+      box-shadow: 0 0 20px cyan;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
+    @media (max-width: 750px) {
+      .container {
+        padding: 1.8rem;
+      }
+      .service-title h1 {
+        font-size: 2.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="electric-overlay"></div>
+  <div class="spark-line"></div>
+
+  <div class="container">
+    <!-- header with AWS icon -->
+    <div class="header">
+      <div class="title-section">
+        <div class="aws-badge">
+          <i class="fab fa-aws"></i> AWS
+        </div>
+        <div class="service-title">
+          <h1>Elastic Container Service</h1>
+          <div class="sub"><i class="fas fa-bolt electric-icon"></i> serverless containers · fully managed</div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 1rem;">
+        <i class="fas fa-cloud" style="font-size: 2.8rem; color: #ff9900; filter: drop-shadow(0 0 15px #ff9900);"></i>
+        <i class="fas fa-cubes" style="font-size: 2.8rem; color: #0cf; filter: drop-shadow(0 0 20px cyan);"></i>
+      </div>
+    </div>
+
+    <!-- AWS service icons row (electric feeling) -->
+    <div class="aws-services-row">
+      <div class="aws-icon-item"><i class="fab fa-aws"></i><span>ECS</span></div>
+      <div class="aws-icon-item"><i class="fas fa-server"></i><span>Fargate</span></div>
+      <div class="aws-icon-item"><i class="fas fa-database"></i><span>DynamoDB</span></div>
+      <div class="aws-icon-item"><i class="fas fa-network-wired"></i><span>VPC</span></div>
+      <div class="aws-icon-item"><i class="fas fa-code-branch"></i><span>CodePipeline</span></div>
+      <div class="aws-icon-item"><i class="fas fa-shield-alt"></i><span>IAM</span></div>
+      <div class="aws-icon-item"><i class="fas fa-chart-line"></i><span>CloudWatch</span></div>
+    </div>
+
+    <!-- PIPELINE with electricity effects -->
+    <div class="pipeline-grid">
+      <div class="node">
+        <i class="fas fa-code"></i>
+        <span>Container Image</span>
+        <small style="color:#aaa;">Docker</small>
+      </div>
+      <div class="connector">
+        <i class="fas fa-bolt lightning-bolt"></i>
+        <i class="fas fa-arrow-right"></i>
+      </div>
+      <div class="node">
+        <i class="fab fa-aws"></i>
+        <span>ECR</span>
+        <small style="color:#aaa;">Registry</small>
+      </div>
+      <div class="connector">
+        <i class="fas fa-bolt lightning-bolt"></i>
+        <i class="fas fa-arrow-right"></i>
+      </div>
+      <div class="node">
+        <i class="fas fa-cubes"></i>
+        <span>ECS Cluster</span>
+        <small style="color:#aaa;">Tasks/Services</small>
+      </div>
+      <div class="connector">
+        <i class="fas fa-bolt lightning-bolt"></i>
+        <i class="fas fa-arrow-right"></i>
+      </div>
+      <div class="node">
+        <i class="fas fa-globe"></i>
+        <span>Load Balancer</span>
+        <small style="color:#aaa;">ALB</small>
+      </div>
+      <div class="connector">
+        <i class="fas fa-bolt lightning-bolt"></i>
+        <i class="fas fa-arrow-right"></i>
+      </div>
+      <div class="node">
+        <i class="fas fa-users"></i>
+        <span>End Users</span>
+        <small style="color:#aaa;">🌐</small>
+      </div>
+    </div>
+
+    <!-- additional electric pipeline hint -->
+    <div style="display: flex; justify-content: center; gap: 2rem; color: #0ff; font-size: 0.9rem; margin-top: -0.5rem;">
+      <span><i class="fas fa-bolt"></i> task placement</span>
+      <span><i class="fas fa-bolt"></i> service auto scaling</span>
+      <span><i class="fas fa-bolt"></i> container insights</span>
+    </div>
+
+    <!-- detail cards about ECS -->
+    <div class="details-grid">
+      <div class="card">
+        <i class="fas fa-rocket"></i>
+        <h3>Fargate Launch Type</h3>
+        <p>Run containers without managing servers. AWS Fargate allocates compute and isolates workloads with electric speed.</p>
+      </div>
+      <div class="card">
+        <i class="fas fa-microchip"></i>
+        <h3>EC2 Launch Type</h3>
+        <p>Fine-grained control over EC2 instances. Cluster auto scaling with lightning-fast container scheduling.</p>
+      </div>
+      <div class="card">
+        <i class="fas fa-plug"></i>
+        <h3>Service Connect</h3>
+        <p>Built-in service mesh for reliable communication. Namespace wiring with pulse-driven discovery.</p>
+      </div>
+      <div class="card">
+        <i class="fas fa-charging-station"></i>
+        <h3>Electric Pipelines</h3>
+        <p>CI/CD integration with CodePipeline & CodeBuild. Deploy containers with charged automation flows.</p>
+      </div>
+    </div>
+
+    <!-- footer with dynamic electricity -->
+    <div class="footer-note">
+      <div class="electric-pulse">
+        <span class="circle-pulse"></span>
+        <span>ECS cluster active • us-east-1</span>
+      </div>
+      <div>
+        <i class="fas fa-bolt" style="color: #ffbb00;"></i> 
+        <span>containers orchestrated with high voltage efficiency</span>
+      </div>
+      <div>
+        <i class="fab fa-aws" style="color: #FF9900;"></i> 
+        <span>elastic container symphony</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
