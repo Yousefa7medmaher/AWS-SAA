@@ -1,0 +1,66 @@
+ # Example Terraform Variable Values
+ # Copy this file to `terraform.tfvars` and edit the values for
+# your environment.  Values not set here fall back to the
+# defaults defined in `variables.tf`.
+
+ # General
+ aws_region   = "us-east-1"
+project_name = "webapp-prod"
+
+tags = {
+  Project     = "scalable-web-app"
+  Environment = "production"
+  ManagedBy   = "terraform"
+}
+
+ # VPC / networking
+ vpc_cidr             = "172.16.0.0/16"
+availability_zones   = ["us-east-1a", "us-east-1b"]
+public_subnet_cidrs  = ["172.16.0.0/24", "172.16.1.0/24"]
+private_subnet_cidrs = ["172.16.2.0/24", "172.16.3.0/24"]
+single_nat_gateway   = true # set false for 1 NAT GW per AZ (full HA)
+
+ # EC2 / Launch Template
+ instance_type = "t3.micro"
+key_name      = null # SSH disabled — access via SSM Session Manager only
+ami_id        = null # auto-selects latest Amazon Linux 2023
+
+ # Auto Scaling Group
+ asg_min_size               = 2
+asg_max_size               = 4
+asg_desired_capacity       = 2
+asg_target_cpu_utilization = 50
+
+ # ALB / Target Group
+ alb_listener_port = 80
+target_group_port = 80
+health_check_path = "/"
+
+ # WAF
+ waf_rate_limit = 2000 # max requests per 5 minutes per IP
+
+ # CloudFront / S3
+ cloudfront_price_class = "PriceClass_100" # US, Canada, Europe edge locations
+
+ # Route 53
+ create_dns_records = false # set true once you own a real domain
+domain_name        = ""
+hosted_zone_id      = ""
+
+ # RDS (PostgreSQL, Multi-AZ)
+ rds_engine_version          = "16.4"
+rds_instance_class          = "db.t3.micro"
+rds_allocated_storage       = 20
+rds_max_allocated_storage   = 100
+rds_db_name                 = "appdb"
+rds_master_username         = "appadmin"
+rds_master_password         = "CHANGE_ME_TO_A_STRONG_PASSWORD!" # REQUIRED — replace before apply
+rds_multi_az                = true
+rds_backup_retention_days   = 7
+rds_deletion_protection     = false
+rds_skip_final_snapshot     = true
+
+ # CloudWatch / SNS
+ alert_email             = "you@example.com" # AWS will email a confirmation link
+cpu_alarm_threshold      = 80
+alb_5xx_alarm_threshold  = 10

@@ -1,0 +1,47 @@
+ # .gitignore for Terraform projects
+ 
+# Terraform directories
+**/.terraform/
+**/.terraform
+
+# Terraform files
+*.tfstate
+*.tfstate.backup
+*.tfstate.backup.*
+crash.log
+crash.log.*
+
+# Terraform plan files
+*.tfplan
+*.tfplan.*
+
+# .terraform.lock.hcl is committed to version control (it pins provider versions)
+# but you may want to ignore it if you prefer dynamic resolution
+# .terraform.lock.hcl
+
+# Sensitive variable files (never commit real secrets)
+*terraform.tfvars
+!terraform.tfvars.example
+
+# Override files (local development only)
+*terraform.tfvars.json
+*override.tf
+*override.tf.json
+*_override.tf
+*_override.tf.json
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
